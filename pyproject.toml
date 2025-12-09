@@ -1,7 +1,11 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
 name = "date-shift"
 version = "0.1.0"
-description = "Add your description here"
+description = "Date shifting tool for patient data in Excel spreadsheets"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
