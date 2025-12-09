@@ -7,6 +7,7 @@ reproducible shifts using a linking table.
 """
 
 import random
+from datetime import date, datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, cast
 
@@ -61,6 +62,37 @@ def load_shift_mappings(csv_path: str) -> pd.DataFrame:
     return df
 
 
+def _parse_date_value(value: Any) -> Optional[pd.Timestamp]:
+    """Parse a value into a pandas Timestamp if possible."""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+
+    # Already datetime-like
+    if isinstance(value, (pd.Timestamp, datetime, date)):
+        return pd.to_datetime(value, errors="coerce")
+
+    if isinstance(value, str):
+        v = value.strip()
+        if not v or v.lower() in {"unknown", "unk", "unkown", "n/a", "none", "null"}:
+            return None
+
+        # Try a handful of common formats, including YYYY-DD-MM found in some feeds
+        for fmt in ("%Y-%m-%d", "%Y-%d-%m", "%d-%m-%Y", "%m-%d-%Y"):
+            try:
+                parsed = pd.to_datetime(v, format=fmt, errors="coerce")
+                if pd.notna(parsed):
+                    return parsed
+            except Exception:
+                pass
+
+        # Fallback: let pandas try with dayfirst to handle ambiguous strings
+        parsed = pd.to_datetime(v, errors="coerce", dayfirst=True, infer_datetime_format=True)
+        return parsed if pd.notna(parsed) else None
+
+    # Anything else: no parse
+    return None
+
+
 def apply_date_shifts(
     df: pd.DataFrame,
     patient_id_col: str,
@@ -92,24 +124,23 @@ def apply_date_shifts(
         if date_col not in df.columns:
             continue
 
-        # Convert to datetime if not already
-        df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
+        # Parse flexible date strings (handles YYYY-DD-MM and placeholders like "Unknown")
+        df[date_col] = df[date_col].apply(_parse_date_value)
 
         # Apply shifts
         df[date_col] = df.apply(
             lambda row: (
                 row[date_col] + pd.Timedelta(days=shift_dict.get(row[patient_id_col], 0))
-                if pd.notna(row[date_col]) and row[patient_id_col] in shift_dict
+                if row[date_col] is not None and row[patient_id_col] in shift_dict
                 else row[date_col]
             ),
             axis=1,
         )
 
         # Convert back to date-only format (removes time component)
-        # Convert datetime to Python date objects (Excel will display as date-only)
-        mask = df[date_col].notna()
-        df.loc[mask, date_col] = df.loc[mask, date_col].apply(lambda x: x.date())
-        df.loc[~mask, date_col] = None
+        df[date_col] = df[date_col].apply(
+            lambda x: x.date() if isinstance(x, (pd.Timestamp, datetime, date)) else None
+        )
 
     return df
 
@@ -365,7 +396,7 @@ def main():
     Main entry point with hardcoded inputs for dev/testing.
     """
     # Toggle between sample files as needed
-    input_file = "test_header_2.xlsx"
+    input_file = "test_unknown.xlsx"
     output_file = "test_shifted.xlsx"
 
     # Configuration: sheet name -> {patient_id_col, date_columns}
@@ -375,7 +406,7 @@ def main():
     sheet_configs: Dict[str, Dict[str, Any]] = {
         "patients": {
             "patient_id_col": "patient_id",
-            "date_columns": ["dob"],
+            "date_columns": ["dob", "date_of_diagnosis"],
             "header_row": 1,  # column names on second row (zero-based index 1)
         },
         "labs": {
