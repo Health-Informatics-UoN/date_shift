@@ -93,6 +93,19 @@ def _parse_date_value(value: Any) -> Optional[pd.Timestamp]:
     return None
 
 
+def _normalize_patient_id(value: Any) -> Optional[str]:
+    """Normalize patient IDs by stripping whitespace and converting to string."""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+
+    if isinstance(value, str):
+        v = value.strip()
+        return v if v else None
+
+    v = str(value).strip()
+    return v if v else None
+
+
 def apply_date_shifts(
     df: pd.DataFrame,
     patient_id_col: str,
@@ -116,6 +129,10 @@ def apply_date_shifts(
         DataFrame with shifted dates.
     """
     df = df.copy()
+
+    # Normalize patient IDs in the working DataFrame to align with mapping keys
+    df[patient_id_col] = df[patient_id_col].apply(_normalize_patient_id)
+
     shift_dict = dict(
         zip(shift_mappings["patient_id"], shift_mappings["shift_days"])
     )
@@ -313,7 +330,13 @@ def shift_excel_dates(
             f"Patient ID column '{patient_id_col}' not found in sheet '{patient_sheet}'"
         )
 
-    patient_ids = patient_df[patient_id_col].dropna().unique().tolist()
+    patient_ids = (
+        patient_df[patient_id_col]
+        .apply(_normalize_patient_id)
+        .dropna()
+        .unique()
+        .tolist()
+    )
 
     # Generate or load shift mappings
     if linking_table_path and Path(linking_table_path).exists():
@@ -334,6 +357,10 @@ def shift_excel_dates(
         shift_mappings = generate_shift_mappings(
             patient_ids, min_shift_days, max_shift_days, seed
         )
+
+    # Normalize and deduplicate patient IDs in the mapping
+    shift_mappings["patient_id"] = shift_mappings["patient_id"].apply(_normalize_patient_id)
+    shift_mappings = shift_mappings.dropna(subset=["patient_id"]).drop_duplicates(subset=["patient_id"], keep="first")
 
     # Process each sheet
     with pd.ExcelWriter(output_file, engine="openpyxl") as writer:
