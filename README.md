@@ -1,4 +1,4 @@
-# nuh-studies
+# nuh-helper
 
 Helper functions for enabling studies: utilities for study enablement such as date shifting, profiling, and related workflows.
 
@@ -10,15 +10,15 @@ pip install ....
 
 ## Modules
 
-- **`nuh_studies.date_shift`** — Date shifting for patient data in Excel/DataFrames (consistent shifts per patient ID, reproducible via linking tables).
+- **`nuh_helper.date_shift`** — Date shifting for patient data in Excel/DataFrames (consistent shifts per patient ID, reproducible via linking tables).
 
 ## Usage
 
 ### Date shifting (basic example)
 
 ```python
-from nuh_studies import shift_excel_dates
-# or: from nuh_studies.date_shift import shift_excel_dates
+from nuh_helper import shift_excel_dates
+# or: from nuh_helper.date_shift import shift_excel_dates
 
 # Configure which sheets and columns to shift
 sheet_configs = {

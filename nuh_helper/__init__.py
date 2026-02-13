@@ -6,7 +6,7 @@ This library provides utilities for study enablement, including:
   (e.g. for pseudonymisation or cohort alignment), with reproducible shifts via linking tables.
 """
 
-from nuh_studies.date_shift import (
+from nuh_helper.date_shift import (
     apply_date_shifts,
     generate_shift_mappings,
     load_shift_mappings,
