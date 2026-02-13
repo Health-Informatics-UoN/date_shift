@@ -1,9 +1,8 @@
 """
-Date shifting tool for patient data in Excel spreadsheets.
+Date shifting for patient data in Excel spreadsheets.
 
-This module provides functionality to consistently shift dates for patient IDs
-across multiple sheets and columns in an Excel file, with support for
-reproducible shifts using a linking table.
+Consistently shifts dates for patient IDs across multiple sheets and columns
+in an Excel file, with support for reproducible shifts using a linking table.
 """
 
 import random
@@ -121,7 +120,7 @@ def apply_date_shifts(
         patient_id_col: Name of the column containing patient IDs.
         date_columns: List of column names containing dates to shift.
         shift_mappings: DataFrame with 'patient_id' and 'shift_days' columns.
-        date_format: Optional date format string (e.g., 'YYYY-MM-DD'). 
+        date_format: Optional date format string (e.g., 'YYYY-MM-DD').
                      Note: This parameter is kept for API compatibility but formatting
                      is applied at the Excel cell level, not in the DataFrame.
 
@@ -210,7 +209,7 @@ def shift_excel_dates(
     ) -> Tuple[pd.DataFrame, pd.DataFrame, List[List[Any]]]:
         """
         Read a sheet preserving description rows and structure.
-        
+
         Returns:
             Tuple of (data_df, description_df, description_rows)
             - data_df: DataFrame with header row as column names and data rows
@@ -219,7 +218,7 @@ def shift_excel_dates(
         """
         # Read entire sheet without header to preserve all rows
         full_df = pd.read_excel(excel_file, sheet_name=sheet_name, header=None)
-        
+
         if header_row == 0:
             # No description rows, header is first row
             description_rows: List[List[Any]] = []
@@ -232,14 +231,14 @@ def shift_excel_dates(
             # Extract description rows (rows before header_row)
             description_rows = full_df.iloc[:header_row].values.tolist()
             description_df = full_df.iloc[:header_row].copy()
-            
+
             # Read data with header_row as column names
             data_df = pd.read_excel(
                 excel_file, sheet_name=sheet_name, header=header_row
             )
-        
+
         return data_df, description_df, description_rows
-    
+
     def _write_sheet_with_structure(
         writer: pd.ExcelWriter,
         sheet_name: str,
@@ -251,7 +250,7 @@ def shift_excel_dates(
     ) -> None:
         """
         Write a sheet preserving description rows and structure.
-        
+
         Args:
             writer: ExcelWriter instance.
             sheet_name: Name of the sheet to write.
@@ -272,23 +271,23 @@ def shift_excel_dates(
                           .replace('DD', 'dd')
                           .replace('MM', 'mm')
             )
-        
+
         # Calculate where to start writing data (after description rows + header row)
         data_start_row = len(description_rows) + 1 if description_rows else 1
-        
+
         # Write data without header first (header=False), then we'll add header manually
         data_df.to_excel(
-            writer, 
-            sheet_name=sheet_name, 
-            index=False, 
+            writer,
+            sheet_name=sheet_name,
+            index=False,
             header=False,
             startrow=data_start_row
         )
-        
+
         # Get the workbook and worksheet
         workbook = writer.book
         worksheet = workbook[sheet_name]
-        
+
         # Write description rows at the top
         if description_rows:
             for row_idx, desc_row in enumerate(description_rows, start=1):
@@ -298,12 +297,12 @@ def shift_excel_dates(
                     if pd.isna(cell_value):
                         cell_value = None
                     worksheet.cell(row=row_idx, column=col_idx, value=cell_value)
-        
+
         # Write header row (after description rows)
         header_row_idx = len(description_rows) + 1 if description_rows else 1
         for col_idx, col_name in enumerate(data_df.columns, start=1):
             worksheet.cell(row=header_row_idx, column=col_idx, value=col_name)
-        
+
         # Apply date formatting to date columns if specified
         if excel_date_format and date_columns:
             # Find column indices for date columns
@@ -424,4 +423,3 @@ __all__ = [
     "generate_shift_mappings",
     "load_shift_mappings",
 ]
-

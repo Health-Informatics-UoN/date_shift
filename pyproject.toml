@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "date-shift"
+name = "nuh-helper"
 version = "0.1.0"
-description = "Date shifting tool for patient data in Excel spreadsheets"
+description = "Helper functions for enabling studies"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [

@@ -1,6 +1,6 @@
-# date-shift
+# nuh-studies
 
-Date shifting tool for patient data in Excel spreadsheets. Consistently shifts dates for patient IDs across multiple sheets and columns in an Excel file, with support for reproducible shifts using a linking table.
+Helper functions for enabling studies: utilities for study enablement such as date shifting, profiling, and related workflows.
 
 ## Installation
 
@@ -8,12 +8,17 @@ Date shifting tool for patient data in Excel spreadsheets. Consistently shifts d
 pip install ....
 ```
 
+## Modules
+
+- **`nuh_studies.date_shift`** — Date shifting for patient data in Excel/DataFrames (consistent shifts per patient ID, reproducible via linking tables).
+
 ## Usage
 
-### Basic Example
+### Date shifting (basic example)
 
 ```python
-from date_shift import shift_excel_dates
+from nuh_studies import shift_excel_dates
+# or: from nuh_studies.date_shift import shift_excel_dates
 
 # Configure which sheets and columns to shift
 sheet_configs = {
@@ -70,7 +75,7 @@ shift_excel_dates(
 )
 ```
 
-## Key Parameters
+### Key parameters (date shifting)
 
 - `input_file`: Path to input Excel file
 - `output_file`: Path to output Excel file with shifted dates
@@ -86,7 +91,7 @@ shift_excel_dates(
 - `seed`: (Optional) Random seed for generating shifts
 - `date_format`: (Optional) Excel date format string (e.g., 'YYYY-MM-DD')
 
-## Features
+### Date shifting features
 
 - Shifts dates consistently across multiple Excel sheets
 - Preserves Excel structure (description rows)

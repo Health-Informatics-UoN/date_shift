@@ -7,7 +7,7 @@ with hardcoded test inputs.
 
 from typing import Any, Dict
 
-from date_shift import shift_excel_dates
+from nuh_studies import shift_excel_dates
 
 
 def main():
