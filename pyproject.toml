@@ -1,20 +1,24 @@
+[project]
+name = "nuh-helper"
+dynamic = ["version"]
+description = "Helper functions for enabling studies"
+readme = "README.md"
+requires-python = ">=3.13"
+
+dependencies = [
+    "pandas>=2.3.3",
+    "openpyxl>=3.1.0",
+]
+
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["nuh_helper"]
 
-[project]
-name = "nuh-helper"
-version = "0.1.0"
-description = "Helper functions for enabling studies"
-readme = "README.md"
-requires-python = ">=3.13"
-dependencies = [
-    "pandas>=2.3.3",
-    "openpyxl>=3.1.0",
-]
+[tool.hatch.version]
+source = "vcs"
 
 [dependency-groups]
 dev = [
