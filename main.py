@@ -5,12 +5,10 @@ This script provides a quick end-to-end test of the date_shift library
 with hardcoded test inputs.
 """
 
-from typing import Any, Dict
-
 from nuh_helper import shift_excel_dates
 
 
-def main():
+def main() -> None:
     """
     Main entry point with hardcoded inputs for dev/testing.
     """
@@ -22,7 +20,7 @@ def main():
     # Currently based on test.xlsx structure:
     # - 'patients' sheet: patient_id, gender, dob (date column)
     # - 'labs' sheet: patient_id, test_date (date column), result
-    sheet_configs: Dict[str, Dict[str, Any]] = {
+    sheet_configs: dict[str, dict[str, str | list[str] | int]] = {
         "patients": {
             "patient_id_col": "patient_id",
             "date_columns": ["dob", "date_of_diagnosis"],
