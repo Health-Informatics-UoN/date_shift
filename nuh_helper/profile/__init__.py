@@ -1,8 +1,9 @@
 import csv
-from pathlib import Path
 from collections import Counter, defaultdict
-from openpyxl import Workbook
 from datetime import datetime
+from pathlib import Path
+
+from openpyxl import Workbook
 
 SCAN_REPORT_FILE_NAME = "ScanReport.xlsx"
 
