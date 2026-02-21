@@ -1,7 +1,7 @@
 [project]
 name = "nuh-helper"
 dynamic = ["version"]
-description = "Helper functions for enabling studies"
+description = "Helper library for enabling studies"
 readme = "README.md"
 requires-python = ">=3.13"
 
@@ -24,7 +24,23 @@ source = "vcs"
 dev = [
     "coverage>=7.13.4",
     "pandas-stubs>=2.3.3.251201",
+    "pre-commit>=4.5.1",
     "pytest>=9.0.2",
     "pytest-cov>=7.0.0",
+    "ruff>=0.15.2",
+    "ty>=0.0.18",
     "types-openpyxl>=3.1.5.20250919",
 ]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint]
+select = ["E", "F", "ANN", "B", "UP", "I", "SIM", "C4"]
+
+[tool.coverage.run]
+branch = true
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]

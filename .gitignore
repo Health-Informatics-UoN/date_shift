@@ -12,8 +12,6 @@ wheels/
 
 # Output files
 *.csv
-*.json
-*.yaml
 *.jsonl
 *.jsonl.gz
 *.jsonl.bz2
