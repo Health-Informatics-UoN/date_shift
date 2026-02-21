@@ -36,4 +36,11 @@ dev = [
 convention = "google"
 
 [tool.ruff.lint]
-select = ["E", "F", "ANN", "B", "UP"]
+select = ["E", "F", "ANN", "B", "UP", "I", "SIM", "C4"]
+
+[tool.coverage.run]
+branch = true
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
