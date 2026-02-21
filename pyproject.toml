@@ -1,7 +1,7 @@
 [project]
 name = "nuh-helper"
 dynamic = ["version"]
-description = "Helper functions for enabling studies"
+description = "Helper library for enabling studies"
 readme = "README.md"
 requires-python = ">=3.13"
 
@@ -34,3 +34,6 @@ dev = [
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.ruff.lint]
+select = ["E", "F", "ANN", "B", "UP"]

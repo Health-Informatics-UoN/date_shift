@@ -25,7 +25,7 @@ TABLE_OVERVIEW_HEADERS = [
 ]
 
 
-def index_table_names(table_names):
+def index_table_names(table_names: list[str]) -> dict[str, str]:
     indexed = {}
     counts = defaultdict(int)
 
@@ -36,13 +36,15 @@ def index_table_names(table_names):
     return indexed
 
 
-def read_csv_header(csv_path):
+def read_csv_header(csv_path: str) -> list[str]:
     with open(csv_path, newline="", encoding="utf-8") as f:
         reader = csv.reader(f)
         return next(reader)
 
 
-def scan_csv_values(csv_path, min_cell_count):
+def scan_csv_values(
+    csv_path: str, min_cell_count: int
+) -> tuple[dict[str, list[tuple[str, int]]], int]:
     counters = defaultdict(Counter)
     row_count = 0
 
@@ -64,14 +66,18 @@ def scan_csv_values(csv_path, min_cell_count):
 
 
 def generate_scan_report(
-    csv_files, output_path=SCAN_REPORT_FILE_NAME, min_cell_count=1
-):
+    csv_files: list[str],
+    output_path: str = SCAN_REPORT_FILE_NAME,
+    min_cell_count: int = 1,
+) -> str:
     tables = []
 
     for csv_file in csv_files:
         csv_file = Path(csv_file)
-        header = read_csv_header(csv_file)
-        tables.append({"name": csv_file.name, "path": csv_file, "fields": header})
+        header = read_csv_header(csv_file.as_posix())
+        tables.append(
+            {"name": csv_file.name, "path": csv_file.as_posix(), "fields": header}
+        )
 
     tables.sort(key=lambda t: t["name"])
     indexed_names = index_table_names([t["name"] for t in tables])
