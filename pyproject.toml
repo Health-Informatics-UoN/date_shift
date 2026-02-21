@@ -31,3 +31,6 @@ dev = [
     "ty>=0.0.18",
     "types-openpyxl>=3.1.5.20250919",
 ]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
