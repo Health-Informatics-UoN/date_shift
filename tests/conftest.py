@@ -11,7 +11,7 @@ def pytest_addoption(parser: pytest.Parser) -> None:
         "--save-output",
         action="store_true",
         default=False,
-        help="Write e2e output files to tests/output/<test-name>/ for manual inspection.",
+        help="Write e2e output files to tests/output/<test-name>/ for inspection.",
     )
 
 
