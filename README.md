@@ -1,6 +1,6 @@
 # nuh-helper
 
-Helper functions for enabling studies: utilities for study enablement such as date shifting, profiling, and related workflows.
+Helper library for enabling data studies: utilities for study enablement such as date shifting, profiling, and related workflows.
 
 ## Notebook Installation
 
