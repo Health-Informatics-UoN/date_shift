@@ -11,8 +11,8 @@ wheels/
 .venv
 
 # Output files
-*.xlsx
 *.csv
+tests/output/
 *.jsonl
 *.jsonl.gz
 *.jsonl.bz2
