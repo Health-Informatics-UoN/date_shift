@@ -42,7 +42,12 @@ CI runs the full test suite; ensure `uv run pytest` passes locally before openin
 
 ## Commits and PRs
 
-- Use **Angular-style semantic commit messages** (e.g. `feat: add X`, `fix: handle Y`, `docs: update Z`). CI checks this.
+- Use **Angular-style semantic PR title messages** (e.g. `feat: add X`, `fix: handle Y`, `docs: update Z`). CI checks this.
 - Open a PR against the default branch. A code owner will review and approve before merge.
 
+## Releases
+
+Releases are made automatically through `semantic-release` and depend on PR titles.
+
 Thank you for contributing.
+
