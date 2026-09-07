@@ -31,7 +31,6 @@ class UnknownPatient(Exception):
 # << end of pr 125
 
 
-# >> pr 127 Exception goes here
 class RowMissingID(Exception):
     def __init__(
         self, sheet_name: str, row_idx: int, col_index: int, value: str
@@ -40,8 +39,6 @@ class RowMissingID(Exception):
         super().__init__(message)
         self._message = message
 
-
-# << end of pr 127
 
 # >> pr 128 Exception goes here
 # << end of pr 128
