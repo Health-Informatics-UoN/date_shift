@@ -581,11 +581,7 @@ from nuh_helper.date_shift.mappings import (  # noqa: E402
 )
 
 __all__ = [
-    "apply_date_shifts",
-    "generate_shift_mappings",
-    "load_shift_mappings",
-    "shift_excel_dates",
-    "shift_excel_dates_inplace",
-    "ShiftFoundNonDate",
-    UnknownPatient,
+    generate_shift_mappings,
+    load_shift_mappings,
+    shift_excel_dates_inplace,
 ]
