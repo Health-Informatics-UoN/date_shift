@@ -538,7 +538,9 @@ def shift_excel_dates_inplace(
                     page_config = sheet_configs[sheet_name]
                     pass_as_is = page_config.get("pass_as_is", {})
                     allowed_non_dates = pass_as_is.get(col_name, [])
-                    if (original_value is None) or (original_value.strip() in allowed_non_dates):
+                    if (original_value is None) or (
+                        original_value.strip() in allowed_non_dates
+                    ):
                         continue
 
                     raise ShiftFoundNonDate(
